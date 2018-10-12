@@ -1,0 +1,176 @@
+{% extends "v1/base.html" %}
+
+{% set title  = 'Parcel - Openbridge' %}
+{% set description  = 'Parcel Page' %}
+
+{% block page_content %}
+
+&nbsp;<br>
+&nbsp;<br>
+&nbsp;<br>
+&nbsp;<br>
+&nbsp;<br>
+&nbsp;
+
+<div class="container">
+  <div class="row">
+    <div id="uploader" class="col-md-4" style="border: 1px solid #ccc; height: 400px">
+    </div>
+    <div id="previews" class="col-md-8 files">
+      <div id="template" class="file-row row">
+        <div class="col-md-2 myprogress">
+          testing12345
+        </div>
+        <div class="col-md-6" style="overflow: hidden;">
+          <div class="dz-filename"><span data-dz-name></span></div>
+          <div class="dz-size" data-dz-size></div>
+        </div>
+        <div class="col-md-4">
+          <div class="dz-success-mark"><span>SUCCESS</span></div>
+          <div class="dz-error-mark"><span>FAILURE</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+
+
+{% block page_script %}
+<script src="/static/js/dropzone.js"></script>
+<script src="/static/js/progressbar.min.js"></script>
+<script src="https://cdn.rawgit.com/lodash/lodash/49b68a7903c58876e0d9a2abd6c43746fdf3dc04/lodash.js"></script>
+<script>
+
+  // For future reference in case we need to change something.
+  // https://www.dropzonejs.com
+  // https://kimmobrunfeldt.github.io/progressbar.js
+  
+  let RotatingProgressBar = function RotatingProgressBar(Shape, container, opts) {
+      this._container = document.querySelector(container);
+      this.bar = new Shape(container, opts);
+  };
+
+  RotatingProgressBar.prototype.rotate = function rotate() {
+      addClass(this._container, 'rotating');
+  };
+
+  RotatingProgressBar.prototype.stopRotating = function stopRotating() {
+      removeClass(this._container, 'rotating');
+  };
+  
+  // Initialize a progress bar.
+  initProgressBar = function(container)
+  {
+    let Shape = ProgressBar.Circle;
+    let rotatingBar = new RotatingProgressBar(Shape, container, {
+        color: '#333',
+        trailColor: '#eee',
+        strokeWidth: 6,
+        duration: 500
+    });
+    
+    rotatingBar.bar.set(0);
+    return rotatingBar;
+  }
+  
+  load = function()
+  {
+    // Get the template HTML and remove it from the doumenthe template HTML and remove it from the doument
+    let previewNode = document.querySelector("#template");
+    let previewTemplate = previewNode.parentNode.innerHTML;
+    let progressBars = [];
+    let options = {
+      url: "/upload",
+      thumbnailWidth: 80,
+      thumbnailHeight: 80,
+      parallelUploads: 20,
+      previewTemplate: previewTemplate,
+      autoQueue: true,
+      previewsContainer: "#previews", 
+      
+      // Make the whole body a dropzone
+      // url: "/target-url", // Set the url
+      // thumbnailWidth: 80,
+      // thumbnailHeight: 80,
+      // autoQueue: false, // Make sure the files aren't queued until manually added
+      // previewsContainer: "#previews", // Define the container to display the previews
+      // clickable: ".fileinput-button" // Define the element that should be used as click trigger to select files.
+    };
+    let myDropzone = new Dropzone("div#uploader", options);
+
+    previewNode.id = "";
+    previewNode.parentNode.removeChild(previewNode);
+
+    myDropzone.on("addedfile", function(file)
+    {
+      // Get the container for the progress
+      let progressContainer = file.previewElement.getElementsByClassName('myprogress');
+
+      // Create the statusbar.
+      progressContainer[0].innerHTML='<div id="status-bar-' + file.upload.uuid + '" class="upload-status"></div>';
+      progressBars[file.upload.uuid] = initProgressBar('#status-bar-' + file.upload.uuid);
+
+    });
+
+    myDropzone.on("uploadprogress", function(file, progress, event)
+    {
+      if (!('animateThrottled' in file))
+      {
+        file.animateThrottled = _.throttle(
+          _.bind(progressBars[file.upload.uuid].bar.animate, progressBars[file.upload.uuid].bar),
+          500
+        );
+      }
+      // console.log(progress/120);
+      file.animateThrottled(progress / 120);
+    });
+
+
+    myDropzone.on("complete", function(file)
+    {
+      if(file.status == "success")
+      {
+        console.log('success');
+      }
+      else
+      {
+        console.log('error');
+      }
+    });
+
+    // // Update the total progress bar
+    // myDropzone.on("totaluploadprogress", function(progress) {
+    //   document.querySelector("#total-progress .progress-bar").style.width = progress + "%";
+    // });
+    //
+    // myDropzone.on("sending", function(file) {
+    //   // Show the total progress bar when upload starts
+    //   document.querySelector("#total-progress").style.opacity = "1";
+    //   // And disable the start button
+    //   file.previewElement.querySelector(".start").setAttribute("disabled", "disabled");
+    // });
+    //
+    // // Hide the total progress bar when nothing's uploading anymore
+    // myDropzone.on("queuecomplete", function(progress) {
+    //   document.querySelector("#total-progress").style.opacity = "0";
+    // });
+    //
+    // // Setup the buttons for all transfers
+    // // The "add files" button doesn't need to be setup because the config
+    // // `clickable` has already been specified.
+    // document.querySelector("#actions .start").onclick = function() {
+    //   myDropzone.enqueueFiles(myDropzone.getFilesWithStatus(Dropzone.ADDED));
+    // };
+    // document.querySelector("#actions .cancel").onclick = function() {
+    //   myDropzone.removeAllFiles(true);
+    // };
+  }
+
+  window.onload=load;
+  
+</script>
+{% endblock %}
+  

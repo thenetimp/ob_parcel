@@ -1,0 +1,26 @@
+body .centered {
+  text-align: center; }
+body .uploader {
+  border: 3px dashed red;
+  height: 300px; }
+body .upload-list {
+  background-color: #ddf;
+  height: 500px; }
+  body .upload-list ul {
+    list-style: none; }
+body .file-row {
+  margin-left: 20px; }
+  body .file-row .dz-success-mark, body .file-row .dz-error-mark {
+    display: none; }
+  body .file-row.dz-complete.dz-error .dz-error-mark {
+    display: inline;
+    color: #fff;
+    background-color: red; }
+  body .file-row.dz-complete.dz-success .dz-success-mark {
+    display: inline;
+    color: #fff;
+    background-color: green; }
+body .upload-status {
+  width: 40px; }
+
+/*# sourceMappingURL=main.css.map */

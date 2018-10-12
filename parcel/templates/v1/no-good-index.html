@@ -1,0 +1,81 @@
+{% extends "v1/base.html" %}
+
+{% set title  = 'Parcel - Openbridge' %}
+{% set description  = 'Parcel Page' %}
+
+{% block page_content %}
+&nbsp;<br>
+&nbsp;<br>
+&nbsp;
+<div class="container">
+  <div class="row">
+    <div class="col-md-3 col-md-offset-2">
+      &nbsp;<br>
+      &nbsp;<br>
+      &nbsp;<br>
+      &nbsp;<br>
+      &nbsp;<br>
+      <div id="uploader" class="uploader">
+      </div>
+    </div>
+    <div class="col-md-6">
+      
+<!-- <div class="dz-preview dz-file-preview">
+  <div class="dz-details">
+    <div class="dz-filename"><span data-dz-name></span></div>
+    <div class="dz-size" data-dz-size></div>
+    <img data-dz-thumbnail />
+  </div>
+  <div class="dz-progress"><span class="dz-upload" data-dz-uploadprogress></span></div>
+  <div class="dz-success-mark"><span>✔</span></div>
+  <div class="dz-error-mark"><span>✘</span></div>
+  <div class="dz-error-message"><span data-dz-errormessage></span></div>
+</div> -->
+      <!-- <div class="upload-list centered">
+        <h1 class="centered">Uploading</h1>
+        <h3 class="centered">2 of 4 files</h3>
+
+        <ul>
+          <li>
+            <div class="upload-card row">
+              <div class="col-md-2">
+              </div>
+              <div class="col-md-6">
+                info
+              </div>
+              <div class="col-md-4">
+                <span>
+                  Success
+                </span><br>
+                <a href onclick="return false;">Download Schema</a>
+
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div> -->
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block page_script %}
+<script src="/static/js/dropzone.js"></script>
+<script src="/static/js/progressbar.min.js"></script>
+<script>
+  // Disable the discovery and options for discovery
+  Dropzone.autoDiscover = false;
+  Dropzone.options.uploader = false;
+  dropzoneOptions = {
+    url: "/upload",
+    // previewTemplate: "test"
+  };
+
+  var myDropzone = new Dropzone("div#uploader", dropzoneOptions);
+  
+
+  
+  
+</script>
+{% endblock %}
+

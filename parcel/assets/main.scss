@@ -1,0 +1,69 @@
+body {
+  
+  .centered {
+    text-align: center;
+  }
+  
+  .uploader {
+    border: 3px dashed red;
+    height: 300px;
+  }
+  
+  .upload-list {
+    background-color: #ddf;
+    height: 500px;
+    
+    ul {
+      list-style: none;
+    }
+
+    .upload-card {
+    }
+    
+    
+    
+  }
+
+
+  // Row for preview/status information top node.
+  .file-row {
+    margin-left: 20px;
+
+    .dz-success-mark,.dz-error-mark {
+      display: none;
+    }
+    
+    
+//    dz-error dz-complete
+    
+    &.dz-complete {
+
+      &.dz-error {
+        .dz-error-mark {
+          display: inline;
+          color: #fff;
+          background-color: red;
+        }
+
+      } 
+      &.dz-success {
+        
+        .dz-success-mark {
+          display: inline;
+          color: #fff;
+          background-color: green;
+        }
+
+      } 
+      
+    }
+
+  }
+
+
+  .upload-status {
+    width: 40px;
+  }
+
+
+}
